@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<title>Surprise For You 💖</title>
+<style>
+body{
+  margin:0;
+  font-family:sans-serif;
+  background:linear-gradient(135deg,#ff9a9e,#fad0c4);
+}
+header{
+  background:#ff4f8b;
+  color:white;
+  padding:15px;
+  text-align:center;
+  font-size:22px;
+}
+.page{display:none;padding:15px;}
+section{
+  background:white;
+  margin-bottom:15px;
+  padding:15px;
+  border-radius:15px;
+  box-shadow:0 5px 15px rgba(0,0,0,.1);
+}
+button{
+  width:100%;
+  padding:12px;
+  margin-top:10px;
+  border:none;
+  border-radius:10px;
+  background:#ff4f8b;
+  color:white;
+  font-size:16px;
+}
+input,textarea{
+  width:100%;
+  padding:10px;
+  border-radius:10px;
+  border:1px solid #ccc;
+  margin-top:5px;
+}
+img{
+  width:100%;
+  border-radius:10px;
+  margin-top:10px;
+}
+
+/* menu */
+.menuGrid{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:15px;
+}
+.menuItem{
+  background:#ff4f8b;
+  color:white;
+  padding:20px;
+  border-radius:15px;
+  text-align:center;
+}
+
+/* password */
+.passbox{
+  display:flex;
+  justify-content:center;
+  gap:12px;
+}
+.passbox input{
+  width:55px;
+  height:55px;
+  font-size:26px;
+  text-align:center;
+}
+
+/* match */
+.game{
+  display:grid;
+  grid-template-columns:repeat(5,1fr);
+  gap:10px;
+}
+.card{
+  background:#ff4f8b;
+  color:white;
+  height:60px;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  font-size:22px;
+  border-radius:10px;
+}
+
+.bigHeart{
+  position:fixed;
+  top:50%;
+  left:50%;
+  transform:translate(-50%,-50%);
+  font-size:150px;
+  z-index:999;
+}
+
+.small{font-size:12px;color:#666;text-align:center;}
+</style>
+</head>
+<body>
+
+<header>💖 เซอร์ไพรส์แฟน 💖</header>
+
+<!-- LOGIN -->
+<div id="loginPage" class="page" style="display:block;">
+<section style="text-align:center;">
+<h2>🔒 ใส่รหัสผ่าน</h2>
+<div class="passbox">
+<input maxlength="1" id="p1" type="tel" inputmode="numeric">
+<input maxlength="1" id="p2" type="tel" inputmode="numeric">
+<input maxlength="1" id="p3" type="tel" inputmode="numeric">
+<input maxlength="1" id="p4" type="tel" inputmode="numeric">
+</div>
+<p class="small">คำใบ้คือวันครบรอบ</p>
+<button onclick="checkPass()">เข้าเว็บ</button>
+<p id="loginMsg"></p>
+</section>
+</div>
+
+<!-- MENU -->
+<div id="menuPage" class="page">
+<section>
+<h2>🏠 เมนู</h2>
+<div class="menuGrid">
+  <div class="menuItem" onclick="go('photoPage')">📸 รูป</div>
+  <div class="menuItem" onclick="go('memoryPage')">📝 ความทรงจำ</div>
+  <div class="menuItem" onclick="go('quizPage');startQuiz()">🎮 เกมคำถาม</div>
+  <div class="menuItem" onclick="go('matchPage');startMatch()">🧠 จับคู่</div>
+  <div class="menuItem" onclick="go('dayPage')">📆 ครบรอบ</div>
+  <div class="menuItem" onclick="go('musicPage')">🎵 เพลง</div>
+</div>
+</section>
+</div>
+
+<!-- PHOTO -->
+<div id="photoPage" class="page">
+<section>
+<h2>📸 รูปของเรา</h2>
+<img src="https://i.imgur.com/4AiXzf8.jpeg">
+<img src="https://i.imgur.com/2nCt3Sbl.jpg">
+<button onclick="go('menuPage')">⬅ กลับ</button>
+</section>
+</div>
+
+<!-- MEMORY -->
+<div id="memoryPage" class="page">
+<section>
+<h2>📝 ความทรงจำ</h2>
+<textarea id="memoryText"></textarea>
+<button onclick="addMemory()">เพิ่ม</button>
+<ul id="memoryList"></ul>
+<button onclick="go('menuPage')">⬅ กลับ</button>
+</section>
+</div>
+
+<!-- QUIZ -->
+<div id="quizPage" class="page">
+<section>
+<h2>🎮 เกมคำถาม</h2>
+<div id="quizBox"></div>
+<button onclick="go('menuPage')">⬅ กลับ</button>
+</section>
+</div>
+
+<!-- REWARD -->
+<div id="rewardPage" class="page">
+<section>
+<h2>🎁 รางวัล</h2>
+<p>หน้านี้เอาไว้ใส่ของเซอร์ไพรส์</p>
+<button onclick="go('menuPage')">⬅ กลับ</button>
+</section>
+</div>
+
+<!-- MATCH -->
+<div id="matchPage" class="page">
+<section>
+<h2>🧠 เกมจับคู่</h2>
+<p id="timer">เวลา: 45</p>
+<div class="game" id="gameBoard"></div>
+<p id="matchResult"></p>
+<button id="retryBtn" onclick="startMatch()" style="display:none;">ลองใหม่</button>
+<button onclick="go('menuPage')">⬅ กลับ</button>
+</section>
+</div>
+
+<!-- DAY -->
+<div id="dayPage" class="page">
+<section>
+<h2>📆 นับวันครบรอบ</h2>
+<p id="dayCount"></p>
+<input id="yearInput" placeholder="พิมพ์จำนวนปี เช่น 5">
+<button onclick="calcFuture()">คำนวณ</button>
+<p id="futureResult"></p>
+<button onclick="go('menuPage')">⬅ กลับ</button>
+</section>
+</div>
+
+<!-- MUSIC -->
+<div id="musicPage" class="page">
+<section>
+<h2>🎵 เพลงรัก</h2>
+
+<p>เพลงนี้ให้ฟังเวลาคิดถึงกัน 💖</p>
+
+<button onclick="playMusic()">▶ เล่นเพลง</button>
+<button onclick="stopMusic()">⏸ หยุดเพลง</button>
+
+<audio id="song" preload="auto">
+  <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+</audio>
+
+<button onclick="go('menuPage')">⬅ กลับ</button>
+</section>
+</div>
+
+<audio id="boomSound" src="https://www.soundjay.com/explosion/explosion-01.mp3"></audio>
+
+<script>
+function go(id){
+document.querySelectorAll(".page").forEach(p=>p.style.display="none");
+document.getElementById(id).style.display="block";
+}
+
+/* LOGIN */
+let inputs=[p1,p2,p3,p4];
+inputs.forEach((inp,i)=>{
+inp.oninput=()=>{if(inp.value && i<3)inputs[i+1].focus();}
+inp.onkeydown=(e)=>{if(e.key==="Backspace" && !inp.value && i>0)inputs[i-1].focus();}
+});
+function checkPass(){
+let pass=p1.value+p2.value+p3.value+p4.value;
+if(pass==="9999"){go("menuPage");}
+else loginMsg.innerText="❌ รหัสผิด";
+}
+
+/* MEMORY */
+let memories=JSON.parse(localStorage.getItem("memories")||"[]");
+function renderMem(){
+memoryList.innerHTML="";
+memories.forEach((m,i)=>{
+let li=document.createElement("li");
+li.innerText=m;
+let b=document.createElement("button");
+b.innerText="ลบ";
+b.onclick=()=>{memories.splice(i,1);saveMem();}
+li.appendChild(b);
+memoryList.appendChild(li);
+});
+}
+function addMemory(){
+if(memoryText.value.trim()=="")return;
+memories.push(memoryText.value);
+memoryText.value="";
+saveMem();
+}
+function saveMem(){
+localStorage.setItem("memories",JSON.stringify(memories));
+renderMem();
+}
+renderMem();
+
+/* QUIZ */
+let questions=[
+{q:"วันครบรอบเราวันที่เท่าไหร่",a:"5 มีนาคม 2567",c:["1 มกรา 2567","5 มีนาคม 2567","14 กุมภา 2567","10 เมษา 2567"]},
+{q:"ครั้งแรกเจอกันที่ไหน",a:"หน้าหอหญิง",c:["หน้าหอชาย","หน้าหอหญิง","เซเว่น","ตลาด"]},
+{q:"เดตแรกของเรา",a:"เดลี่ควีนซอยพรหน้ามทร.ธัญบุรี",c:["KFC","MK","เดลี่ควีนซอยพรหน้ามทร.ธัญบุรี","Swensen"]},
+{q:"ทริปแรกเราไปไหน",a:"น้ำผุด เขาใหญ่",c:["ทะเล","น้ำผุด เขาใหญ่","ภูทับเบิก","เชียงใหม่"]}
+];
+let qi=0,score=0;
+function startQuiz(){
+qi=0;score=0;loadQ();
+}
+function loadQ(){
+let q=questions[qi];
+quizBox.innerHTML="<p>"+q.q+"</p>";
+q.c.forEach(ch=>{
+let b=document.createElement("button");
+b.innerText=ch;
+b.onclick=()=>{
+if(ch==q.a)score++;
+qi++;
+qi<questions.length?loadQ():finishQuiz();
+};
+quizBox.appendChild(b);
+});
+}
+function finishQuiz(){
+quizBox.innerHTML="คะแนน "+score+"/"+questions.length;
+if(score==questions.length){
+let b=document.createElement("button");
+b.innerText="กดเพื่อรับรางวัล";
+b.onclick=()=>go("rewardPage");
+quizBox.appendChild(b);
+}
+}
+
+/* MATCH */
+let symbols=["💖","💖","🐱","🐱","🌸","🌸","⭐","⭐","🎁","🎁","🍀","🍀","🍓","🍓","🧸","🧸","🎮","🎮","🐰","🐰"];
+let first=null,lock=false,time=45,timer;
+
+function startMatch(){
+gameBoard.innerHTML="";
+matchResult.innerHTML="";
+retryBtn.style.display="none";
+symbols.sort(()=>Math.random()-0.5);
+first=null;lock=false;time=45;
+
+symbols.forEach(sym=>{
+let c=document.createElement("div");
+c.className="card";c.innerText="?";
+c.onclick=function(){
+if(lock||c.innerText!="?")return;
+c.innerText=sym;
+if(!first)first=c;
+else{
+if(first.innerText===sym){first=null;}
+else{
+lock=true;
+setTimeout(()=>{c.innerText="?";first.innerText="?";first=null;lock=false;},500);
+}
+}
+}
+gameBoard.appendChild(c);
+});
+
+clearInterval(timer);
+timer=setInterval(()=>{
+if(time>0){
+time--;document.getElementById("timer").innerText="เวลา: "+time;
+}else{
+clearInterval(timer);
+boomSound.play();
+let heart=document.createElement("div");
+heart.className="bigHeart";
+heart.innerText="💔";
+document.body.appendChild(heart);
+matchResult.innerHTML="<h2>จำรูปเราไม่ได้หยอ 😭</h2>";
+retryBtn.style.display="block";
+setTimeout(()=>heart.remove(),1500);
+}
+},1000);
+}
+
+/* DAY */
+let startDate=new Date(2024,2,5);
+setInterval(()=>{
+let now=new Date();
+let diff=now-startDate;
+let d=Math.floor(diff/86400000);
+let h=Math.floor(diff%86400000/3600000);
+let m=Math.floor(diff%3600000/60000);
+let s=Math.floor(diff%60000/1000);
+dayCount.innerText=`คบมาแล้ว ${d} วัน ${h} ชม ${m} นาที ${s} วิ`;
+},1000);
+function calcFuture(){
+let y=parseInt(yearInput.value);
+if(!y)return;
+futureResult.innerText="ประมาณ "+(y*365)+" วัน";
+}
+
+/* MUSIC */
+function playMusic(){song.play();}
+function stopMusic(){song.pause();song.currentTime=0;}
+</script>
+
+</body>
+</html>
